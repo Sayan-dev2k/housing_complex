@@ -1,0 +1,472 @@
+Router>en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#hostname 
+Router(config)#hostn ISP1
+ISP1(config)#int gig0/1
+ISP1(config-if)#ip add 192.168.3.1 255.255.255.0
+ISP1(config-if)#no sh
+
+ISP1(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/1, changed state to up
+ISP1(config-if)#ip add 192.168.3.1 255.255.255.0
+ISP1(config-if)#no sh
+
+Router>en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#hostn ISP2
+ISP2(config)#int gig0/0
+ISP2(config-if)#no sh
+
+ISP2(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0, changed state to up
+
+ISP2(config-if)#int gig0/1
+ISP2(config-if)#ip add 192.168.3.2 255.255.255.0
+ISP2(config-if)#no sh
+
+comp1(config)#vlan 10
+comp1(config-vlan)#name block1
+comp1(config-vlan)#vlan 20
+comp1(config-vlan)#name block2
+comp1(config-vlan)#vlan 30
+comp1(config-vlan)#name block3
+comp1(config-vlan)#vlan 40
+comp1(config-vlan)#name block4
+comp1(config-vlan)#do show vlan br
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/1, Fa0/2, Fa0/3, Fa0/4
+                                                Fa0/5, Fa0/6, Fa0/7, Fa0/8
+                                                Fa0/9, Fa0/10, Fa0/11, Fa0/12
+                                                Fa0/13, Fa0/14, Fa0/15, Fa0/16
+                                                Fa0/17, Fa0/18, Fa0/19, Fa0/20
+                                                Fa0/21, Fa0/22, Fa0/23, Fa0/24
+10   block1                           active    
+20   block2                           active    
+30   block3                           active    
+40   block4                           active    
+1002 fddi-default                     active    
+1003 token-ring-default               active    
+1004 fddinet-default                  active    
+1005 trnet-default                    active
+comp1(config)#interface FastEthernet0/2
+comp1(config-if)#switchport mode trunk
+comp1(config-if)#switchport access vlan 10
+comp1(config-if)#switchport mode access
+comp1(config-if)#interface FastEthernet0/3
+comp1(config-if)#switchport mode trunk
+comp1(config-if)#switchport access vlan 20
+comp1(config-if)#switchport mode access
+comp1(config-if)#interface FastEthernet0/4
+comp1(config-if)#switchport mode trunk
+comp1(config-if)#switchport access vlan 30
+comp1(config-if)#switchport mode access
+comp1(config-if)#interface FastEthernet0/5
+comp1(config-if)#switchport mode trunk
+comp1(config-if)#switchport access vlan 40
+comp1(config-if)#switchport mode access
+Switch>en
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#hostn block1
+block1(config)#vlan 10
+block1(config-vlan)#name block1
+block1(config-if)#int fa0/1
+block1(config-if)#switchport access vlan 10
+block1(config-if)#switchport mode access
+Switch(config)#hostn block1
+block2(config-vlan)#vlan 20
+block2(config-vlan)#name block2
+block2(config-if)#int fa0/1
+block2(config-if)#switchport access vlan 20
+block2(config-if)#no switchport mode access
+Switch>en
+Switch#conf t
+Switch(config)#hostname block3
+block3(config)#vlan 30
+block3(config-vlan)#name block3
+block3(config-vlan)#int fa0/1
+block3(config-if)#switchport access vlan 30
+block3(config-if)#switchport mode access
+block4(config-vlan)#vlan 40
+block4(config-vlan)#name block4
+block4(config-vlan)#int fa0/1
+block4(config-if)#switchport access vlan 40
+block4(config-if)#switchport mode access
+base=172.20.0.0
+sm=255.255.0.0
+no of subnets reqd=4
+minimum no. of subnets to be taken=4=2^2=2^n
+converted nw bits=2
+total nw bits=16+2=18
+new sm=255.255.192.0
+h=16-2=14
+block size=2^14
+valid hosts=2^14-2
+Each block=256
+total blocks=2^6=64
+172.20.0.0-172.20.63.255
+172.20.64.0-172.20.127.255
+172.20.128.0-172.20.191.255
+172.20.192.0-172.20.255.255
+ISP1(config)#int gig0/0
+ISP1(config-if)#int fa0/0.10
+ISP1(config-subif)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/0.10, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0.10, changed state to up
+
+ISP1(config-subif)#encapsulation dot1Q 10
+ISP1(config-subif)#ip add 172.20.0.1 255.255.192.0
+ISP1(config-subif)#int fa0/0.20
+ISP1(config-subif)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/0.20, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0.20, changed state to up
+
+ISP1(config-subif)#encapsulation dot1Q 20
+ISP1(config-subif)#ip add 172.20.64.1 255.255.192.0
+ISP1(config-subif)#int fa0/0.30
+ISP1(config-subif)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/0.30, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0.30, changed state to up
+
+ISP1(config-subif)#encapsulation dot1Q 30
+ISP1(config-subif)#ip add 172.20.128.1 255.255.192.0
+ISP1(config-subif)#int fa0/0.40
+ISP1(config-subif)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/0.40, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0.40, changed state to up
+
+ISP1(config-subif)#encapsulation dot1Q 40
+ISP1(config-subif)#ip add 172.20.192.1 255.255.192.0
+ISP1(config-subif)#
+ISP1(config)#ip dhcp pool block1
+ISP1(dhcp-config)#default-router 172.20.0.1
+ISP1(dhcp-config)#net 172.20.0.0 255.255.192.0
+ISP1(dhcp-config)#ip dhcp pool block2
+ISP1(dhcp-config)#default-router 172.20.64.1
+ISP1(dhcp-config)#net 172.20.64.0 255.255.192.0
+ISP1(dhcp-config)#ip dhcp pool block3
+ISP1(dhcp-config)#default-router 172.20.128.1
+ISP1(dhcp-config)#default-router 172.20.128.0
+ISP1(dhcp-config)#default-router 172.20.128.1
+ISP1(dhcp-config)#net 172.20.128.0 255.255.192.0
+ISP1(dhcp-config)#ip dhcp pool block4
+ISP1(dhcp-config)#default-router 172.20.192.1
+ISP1(dhcp-config)#net 172.20.192.0 255.255.192.0
+block1(config)#int fa0/2
+block1(config-if)#switchport access vlan 10
+block1(config-if)#switchport mode access
+block1(config-if)#int fa0/3
+block1(config-if)#switchport access vlan 10
+block1(config-if)#switchport mode access
+block1(config-if)#int fa0/4
+block1(config-if)#switchport access vlan 10
+block1(config-if)#switchport mode access
+block2(config)#int fa0/2
+block2(config-if)#switchport access vlan 20
+block2(config-if)#switchport mode access
+block2(config-if)#int fa0/3
+block2(config-if)#switchport access vlan 20
+block2(config-if)#switchport mode access
+block2(config-if)#int fa0/4
+block2(config-if)#switchport access vlan 20
+block2(config-if)#switchport mode access
+block3(config)#int fa0/2
+block3(config-if)#switchport access vlan 30
+block3(config-if)#switchport mode access 
+block3(config-if)#int fa0/3
+block3(config-if)#switchport access vlan 30
+block3(config-if)#switchport mode access 
+block3(config-if)#int fa0/4
+block3(config-if)#switchport access vlan 30
+block3(config-if)#switchport mode access
+Enter configuration commands, one per line.  End with CNTL/Z.
+block4(config)#int fa0/2
+block4(config-if)#switchport access vlan 40
+block4(config-if)#switchport mode access
+block4(config-if)#int fa0/3
+block4(config-if)#switchport access vlan 40
+block4(config-if)#switchport mode access
+block4(config-if)#int fa0/4
+block4(config-if)#switchport access vlan 40
+block4(config-if)#switchport mode access
+
+Switch>en
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#hostname comp2
+comp2(config)#vlan 50
+comp2(config-vlan)#name cafe
+comp2(config-vlan)#vlan 60
+comp2(config-vlan)#name banquet
+comp2(config-vlan)#int fa1/1
+comp2(config-if)#switchport access vlan 50
+comp2(config-if)#switchport mode access
+comp2(config-if)#switchport mode trunk
+comp2(config-if)#int fa2/1
+comp2(config-if)#switchport access vlan 60
+comp2(config-if)#switchport mode access
+comp2(config-if)#switchport mode trunk
+Switch>en
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#hostn CAFE
+CAFE(config)#int range fa0/1-2
+CAFE(config-if-range)#switchport access vlan 50
+CAFE(config-if-range)#switchport mode access 
+Switch>en
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#hostname BANQUET
+BANQUET(config)#int fa0/2
+BANQUET(config-if)#int range fa0/1-2
+BANQUET(config-if-range)#switchport access vlan 60
+BANQUET(config-if-range)#switchport mode access 
+base=172.30.0.0
+sm=255.255.0.0
+no of subnets reqd=2
+minimum no. of subnets to be taken=2=2^1=2^n
+converted nw bits=1
+total nw bits=8+8+1=17
+new sm=255.255.128.0
+h=15
+valid hosts/subnet=2^15-2
+No of blocks=2^7=128
+172.30.0.0-172.30.127.255
+172.30.128.0-172.30.255.255
+ISP2>en
+ISP2#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+ISP2(config)#int fa0/0.50
+ISP2(config-subif)#encapsulation dot1Q 50
+ISP2(config-subif)#ip add 172.30.0.1 255.255.128.0
+ISP2(config-subif)#int fa0/0.60
+ISP2(config-subif)#encapsulation dot1Q 60
+ISP2(config-subif)#ip add 172.30.128.1 255.255.128.0
+ISP2(config-subif)#ip dhcp pool cafe
+ISP2(dhcp-config)#default-router 172.30.128.1
+ISP2(dhcp-config)#net 172.30.128.0 255.255.128.0
+ISP2(dhcp-config)#ip dhcp pool banquet
+ISP2(dhcp-config)#default-router 172.30.0.1
+ISP2(dhcp-config)#net 172.30.0.0 255.255.128.0
+
+ISP1(config)#int fa0/0
+ISP1(config-if)#no sh
+-----------voip---------------------------
+ISP1(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+
+ISP1(config-if)#ip add 173.20.3.1 255.255.255.0
+ISP1(config-if)#no sh
+ISP1(config-if)#ip dhcp pool voice
+ISP1(dhcp-config)#net 173.20.3.0 255.255.255.0
+ISP1(dhcp-config)#default-router 173.20.3.1
+ISP1(dhcp-config)#option 150 ip 173.20.3.1
+ISP1(dhcp-config)#telephony-service
+ISP1(config-telephony)#max-dn 3
+ISP1(config-telephony)#max-dn 4
+ISP1(config-telephony)#max-ephones 4
+ISP1(config-telephony)#ip source-address 173.20.3.1 port 2000
+ISP1(config-telephony)#auto assign 1 to 5
+ISP1(config-telephony)#auto assign 4 to 6
+ISP1(config)#ephone-dn 1
+ISP1(config-ephone-dn)#%LINK-3-UPDOWN: Interface ephone_dsp DN 1.1, changed state to up
+
+ISP1(config-ephone-dn)#number 123456
+ISP1(config-ephone-dn)#ephone-dn 1
+%IPPHONE-6-REGISTER: ephone-3 IP:173.20.3.5 Socket:2 DeviceType:Phone has registered.
+                        ^
+% Invalid input detected at '^' marker.
+	
+ISP1(config-ephone-dn)#ephone-dn 2
+ISP1(config-ephone-dn)#%LINK-3-UPDOWN: Interface ephone_dsp DN 2.1, changed state to up
+
+ISP1(config-ephone-dn)#number 456123
+ISP1(config-ephone-dn)#
+%IPPHONE-6-REGISTER: ephone-4 IP:173.20.3.4 Socket:2 DeviceType:Phone has registered.
+
+ISP1(config-ephone-dn)#ephone-dn 3
+ISP1(config-ephone-dn)#%LINK-3-UPDOWN: Interface ephone_dsp DN 3.1, changed state to up
+
+ISP1(config-ephone-dn)#number 654321
+ISP1(config-ephone-dn)#
+%IPPHONE-6-REGISTER: ephone-1 IP:173.20.3.2 Socket:2 DeviceType:Phone has registered.
+ISP1(config-ephone-dn)#ephone-dn 4
+ISP1(config-ephone-dn)#%LINK-3-UPDOWN: Interface ephone_dsp DN 4.1, changed state to up
+
+ISP1(config-ephone-dn)#number 137462
+ISP1(config-ephone-dn)#
+%IPPHONE-6-REGISTER: ephone-2 IP:173.20.3.3 Socket:2 DeviceType:Phone has registered.
+comp1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+comp1(config)#int fa0/1
+comp1(config-if)#int fa0/6
+comp1(config-if)#switchport voice vlan 1
+comp1(config-if)#switchport mode access
+comp1(config-if)#int fa0/7
+comp1(config-if)#switchport voice vlan 1
+comp1(config-if)#switchport mode access
+comp1(config-if)#int fa0/8
+comp1(config-if)#switchport voice vlan 1
+comp1(config-if)#switchport mode access
+comp1(config-if)#int fa0/9
+comp1(config-if)#switchport voice vlan 1
+comp1(config-if)#switchport mode access
+
+ISP1(config)#int fa0/1
+ISP1(config-if)#ip add 192.168.3.1 255.255.255.0
+ISP1(config-if)#no sh
+
+<-----------------VPN-------------------------------->
+Router>en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#hostname R1
+R1(config)#int fa0/0
+R1(config-if)#ip add 192.168.2.1 255.255.255.0
+R1(config-if)#no sh
+
+R1(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+
+R1(config-if)#int fa0/1
+R1(config-if)#ip add 192.168.3.1 255.255.255.0
+R1(config-if)#no sh
+
+R1>en
+R1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R1(config)#
+R1(config)#int tunnel 0
+
+R1(config-if)#
+%LINK-5-CHANGED: Interface Tunnel0, changed state to up
+
+R1(config-if)#ip add 192.168.1.1 255.255.255.0
+R1(config-if)#tunnel source fa0/1
+R1(config-if)#tunnel destination 192.168.4.2
+R1(config-if)#
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Tunnel0, changed state to up
+Router>en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#hostn R2
+R2(config)#int fa0/0
+R2(config-if)#ip add 192.168.3.2 255.255.255.0
+R2(config-if)#no sh
+
+R2(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+
+R2(config-if)#int fa0/1
+R2(config-if)#ip add 192.168.4.1 255.255.255.0
+R2(config-if)#no sh
+Router>en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#hostn R3
+R3(config)#int fa0/0
+R3(config-if)#ip add 192.168.4.2 255.255.255.0
+R3(config-if)#no sh
+
+R3(config-if)#
+%LINK-5-CHANGED: Interface FastEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/0, changed state to up
+
+R3(config-if)#int fa0/1
+R3(config-if)#ip add 192.168.5.1 255.255.255.0
+R3(config-if)#no sh
+R3(config)#int tunnel 0
+
+R3(config-if)#
+%LINK-5-CHANGED: Interface Tunnel0, changed state to up
+
+R3(config-if)#ip add 192.168.1.2 255.255.255.0
+R3(config-if)#tunnel source fa0/0
+R3(config-if)#tunnel destination 192.168.3.1
+R3(config-if)#
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Tunnel0, changed state to up
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
